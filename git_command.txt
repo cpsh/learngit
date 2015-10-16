@@ -1,0 +1,135 @@
+git init 							//将目录初始化为版本库 ，生成.git文件夹		创建Git版本库时，Git自动为我们创建了唯一一个master分支
+
+git add filename  					//往版本库添加文件			把文件修改添加到暂存区
+
+git commit -m 注释 					//提交文件到版本库，		把暂存区的所有内容提交到当前分支。
+
+git log 	--pretty=oneline		//查看历史记录--pretty=oneline参数查看输出信息在一行
+
+git reset --hard HEAD^  			//回退到上一个版本 	 HEAD表示当前版本 	上一个版本就是HEAD^ 	上上一个版本就是HEAD^^  往上100个版本HEAD~100
+
+git reflog							//记录你的每一次命令
+
+
+HEAD指向的版本就是当前版本，因此，Git允许我们在版本的历史之间穿梭，使用命令git reset --hard commit_id。
+
+穿梭前，用git log可以查看提交历史，以便确定要回退到哪个版本。
+
+要重返未来，用git reflog查看命令历史，以便确定要回到未来的哪个版本
+
+
+git status							//查看文件的状态
+
+
+Git跟踪修改的，每次修改，如果不add到暂存区，那就不会加入到commit中。
+
+
+git checkout -- file				//撤销文件修改：命令中的--很重要，没有--，就变成了“创建一个新分支”的命令
+
+
+命令git checkout -- readme.txt意思就是，把readme.txt文件在工作区的修改全部撤销，这里有两种情况：
+
+一种是readme.txt自修改后还没有被放到暂存区，现在，撤销修改就回到和版本库一模一样的状态；
+
+一种是readme.txt已经添加到暂存区后，又作了修改，现在，撤销修改就回到添加到暂存区后的状态。
+
+总之，就是让这个文件回到最近一次git commit或git add时的状态
+
+
+git reset HEAD file可以把暂存区的修改撤销掉（unstage），重新放回工作区
+
+在工作区删除文件rm file ，版本库也需要删除:
+git rm	file
+git commit	-m '注释'
+
+误删工作区，未提交，则从版本库恢复，git checkout -- file
+
+
+
+创建远程仓库：
+1、创建SSH Key	在用户主目录下，看看有没有.ssh目录，如果有，再看看这个目录下有没有id_rsa和id_rsa.pub这两个文件，如果已经有了，可直接跳到下一步。如果没有，打开Shell（Windows下打开Git Bash），创建SSH Key：
+ ssh-keygen -t rsa -C "xxxxx@example.com"
+ 
+ 在用户主目录里找到.ssh目录，里面有id_rsa和id_rsa.pub两个文件，这两个就是SSH Key的秘钥对，id_rsa是私钥,id_rsa.pub是公钥
+ 
+第2步：登陆GitHub，打开“Account settings”，“SSH Keys”页面：https://github.com/settings/ssh
+点“Add SSH Key”，填上任意Title，在Key文本框里粘贴id_rsa.pub文件的内容：
+
+为什么GitHub需要SSH Key呢？
+因为GitHub需要识别出你推送的提交确实是你推送的，而不是别人冒充的，而Git支持SSH协议，所以，GitHub只要知道了你的公钥，就可以确认只有你自己才能推送。 
+
+GitHub允许你添加多个Key。假定你有若干电脑,只要把每台电脑的Key都添加到GitHub，就可以在每台电脑上往GitHub推送了。	//只要push的账号在gitHub远程库中有与其绑定的SSH key就行
+
+
+创建一个版本库
+echo # learngit >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin git@github.com:cpsh/learngit.git
+git push -u origin master
+
+
+将已有的版本库推送到远程库
+git remote add origin git@github.com:cpsh/learngit.git			//要关联一个远程库
+git push -u origin master										//关联后，使用命令git push -u origin master第一次推送master分支的所有内容；
+
+远程库是空的，我们第一次推送master分支时，加上了-u参数，Git不但会把本地的master分支内容推送的远程新的master分支，还会把本地的master分支和远程的master分支关联起来，在以后的推送或者拉取时就可以简化命令。
+
+
+git push 			//把本地库的内容推送到远程
+
+
+git push origin master			//此后，每次本地提交后，只要有必要，就可以使用命令git push origin master推送最新修改；
+
+
+克隆一个仓库，首先必须知道仓库的地址，然后使用git clone命令克隆
+git clone git@github.com:cpsh/gitskills.git
+
+
+
+
+
+查看分支：git branch							//命令会列出所有分支，当前分支前面会标一个*号。
+
+创建分支：git branch <name>						
+
+切换分支：git checkout <name>
+
+创建+切换分支：git checkout -b <name>			-b参数表示创建并切换
+
+合并某分支到当前分支：git merge <name>
+
+删除分支：git branch -d <name>
+
+git log --graph									//看到分支合并图。
+
+
+git merge --no-ff -m 'merge dev to master' dev  		//将dev分支merge到master上，使用普通合并方式，不是fast-forward: Fast forward模式，但这种模式下，删除分支后，会丢掉分支信息。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
